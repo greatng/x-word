@@ -123,8 +123,8 @@ export function WordSearchGame({
     const checkSelection = () => {
         if (activeClue === null || selected.length === 0) return;
         const placement = placements[activeClue];
-        const cells = getCellsForPlacement(placement, board.length);
         const selectedText = selected.map((p) => board[p.r][p.c]).join('');
+
         console.log(
             'Selected text:',
             selectedText,
@@ -135,7 +135,7 @@ export function WordSearchGame({
             setSolved((prev) =>
                 prev.includes(activeClue) ? prev : [...prev, activeClue],
             );
-            setSelected(cells);
+            setSelected([]);
         } else {
             setSelected([]);
         }
