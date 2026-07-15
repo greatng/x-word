@@ -125,6 +125,12 @@ export function WordSearchGame({
         const placement = placements[activeClue];
         const cells = getCellsForPlacement(placement, board.length);
         const selectedText = selected.map((p) => board[p.r][p.c]).join('');
+        console.log(
+            'Selected text:',
+            selectedText,
+            'Expected:',
+            placement.word,
+        );
         if (selectedText === placement.word) {
             setSolved((prev) =>
                 prev.includes(activeClue) ? prev : [...prev, activeClue],
@@ -156,6 +162,7 @@ export function WordSearchGame({
         setSelected([]);
         setActiveClue(null);
         setIsLoading(true);
+        setSolved([]);
         if (debugMode) {
             setLoadedEntries(debugEntries);
             setIsLoading(false);
