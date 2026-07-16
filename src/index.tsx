@@ -59,7 +59,8 @@ export function WordSearchGame({
     const [loadedEntries, setLoadedEntries] = useState(
         initialState?.entries ?? entries,
     );
-    const [isLoading, setIsLoading] = useState(true);
+    const [isFromSave, setIsFromSave] = useState(!!initialState);
+    const [isLoading, setIsLoading] = useState(false);
     const activeEntries = debugMode ? debugEntries : loadedEntries;
     const { board, placements } = useMemo(
         () =>
@@ -93,30 +94,33 @@ export function WordSearchGame({
             return;
         }
 
-        let active = true;
+        console.log('hello', isFromSave, initialState);
+
+        if (isFromSave) {
+            setIsFromSave(false);
+            return;
+        }
+
         setIsLoading(true);
-        fetchWordSearchEntries(jlptLevel)
+
+        const abortController = new AbortController();
+
+        fetchWordSearchEntries(jlptLevel, 5, abortController.signal)
             .then((data) => {
-                if (active) {
-                    setLoadedEntries(data);
-                    setSelected([]);
-                    setActiveClue(null);
-                    setSolved([]);
-                }
+                setLoadedEntries(data);
+                setSelected([]);
+                setActiveClue(null);
+                setSolved([]);
             })
             .catch(() => {
-                if (active) {
-                    setLoadedEntries(entries);
-                }
+                setLoadedEntries(entries);
             })
             .finally(() => {
-                if (active) {
-                    setIsLoading(false);
-                }
+                setIsLoading(false);
             });
 
         return () => {
-            active = false;
+            abortController.abort();
         };
     }, [debugMode, entries, jlptLevel]);
 
@@ -182,7 +186,7 @@ export function WordSearchGame({
     };
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#0f172a,_#111827_55%,_#020617)] p-4 text-slate-100">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,#0f172a,#111827_55%,#020617)] p-4 text-slate-100">
             <div className="mx-auto flex max-w-6xl flex-col gap-4 rounded-[28px] border border-slate-700/80 bg-slate-900/80 p-4 shadow-2xl shadow-black/50 backdrop-blur md:p-6">
                 <WordSearchHeader
                     title={title}

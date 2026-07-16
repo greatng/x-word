@@ -147,7 +147,7 @@ export function WordSearchHeader({
                     onClick={onReset}
                     className="rounded-full border border-slate-700 bg-slate-800/80 px-3 py-1 text-sm font-medium text-slate-200"
                 >
-                    Reset
+                    Reload
                 </button>
                 <div className="rounded-full border border-violet-500/40 bg-violet-500/10 px-3 py-1 text-sm text-violet-200">
                     Hiragana only
